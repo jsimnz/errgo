@@ -51,4 +51,17 @@ This allows more verbose error handling, so you can handle the appropriate error
 
 ### Backwards Compatibility
 
-I tried to make this package 100% backwards compatible with the current errors package, however for ease of use that wasnt completly possible. The main Err type in this package implements the Go error interface, so it is compatible in that sense. Where the compatibility stops (sort of). The public function ```New()``` 
+I tried to make this package 100% backwards compatible with the current errors package, however for ease of use that wasnt completly possible. The main Err type in this package implements the Go error interface, so it is compatible in that sense. Where the compatibility stops (sort of). The public function `New()` defined acts very similar to the `errors.New()`.
+
+```
+	errors.New("Some error") // standard go error package
+	errgo.New("Some error") // equivalent 
+```
+
+However the function signatures differ to allow the dynamic variables and types this package is based behind
+
+##### Signatures
+The Go standard error package:
+	`func New(string) error`
+This package
+	`func New(interface{}, ...interface{}) Err`
