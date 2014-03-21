@@ -16,26 +16,26 @@ var (
 
 func init() {
 	errs = errMap{
-		m: make(map[int]err),
+		m: make(map[int]Err),
 	}
 }
 
 type errMap struct {
 	// Map between error types, and their assosciated error
-	m map[int]err
+	m map[int]Err
 	sync.RWMutex
 }
 
-type err struct {
+type Err struct {
 	// Error type
 	errType int
 	// error string
 	str string
 }
 
-func New(e interface{}, params ...interface{}) err {
+func New(e interface{}, params ...interface{}) Err {
 	if reflect.ValueOf(e).Type().String() == "string" {
-		return err{errType: NO_TYPE, str: e.(string)}
+		return Err{errType: NO_TYPE, str: e.(string)}
 	} else if reflect.ValueOf(e).Type().String() == "int" {
 		errs.RLock()
 		defer errs.RUnlock()
@@ -46,31 +46,23 @@ func New(e interface{}, params ...interface{}) err {
 	panic("Cannot create error as defined")
 }
 
-/*func NewType(errType int, params ...interface{}) err {
-	errs.RLock()
-	defer errs.RUnlock()
-	e := errs.m[errType]
-	e.str = fmt.Sprintf(e.str, params...)
-	return e
-}*/
-
 func Register(errType int, str string) {
 	errs.Lock()
 	defer errs.Unlock()
-	errs.m[errType] = err{
+	errs.m[errType] = Err{
 		errType: errType,
 		str:     str,
 	}
 }
 
-func (e err) String() string {
+func (e Err) String() string {
 	return e.str
 }
 
-func (e err) IsType(errType int) bool {
+func (e Err) IsType(errType int) bool {
 	return e.errType == errType
 }
 
-func (e err) Type() int {
+func (e Err) Type() int {
 	return e.errType
 }
