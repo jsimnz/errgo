@@ -60,8 +60,9 @@ I tried to make this package 100% backwards compatible with the current errors p
 
 However the function signatures differ to allow the dynamic variables and types this package is based behind
 
-##### Signatures
-The Go standard error package:
-	`func New(string) error`
-This package
-	`func New(interface{}, ...interface{}) Err`
+```
+	func New(string) error
+	func New(interface{}, ...interface{}) Err
+```
+
+This package can still act as a drop-in replacement in most situations
